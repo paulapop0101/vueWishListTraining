@@ -149,5 +149,6 @@ h2:after {
 }
 .products {
   align-items: center;
+  padding-left: 3.5em;
 }
 </style>
