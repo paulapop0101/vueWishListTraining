@@ -9,10 +9,10 @@ function addToWishlist() {
   let products = [];
   if (localStorage.getItem("products")) {
     products = JSON.parse(localStorage.getItem("products"));
-    let products = products.filter((product) => product.id !== props.id);
+    products = products.filter((product) => product.id !== props.id);
   }
   products.push({ id: props.id, title: props.title, price: props.price });
-  console.log(products);
+  // console.log(products);
   localStorage.setItem("products", JSON.stringify(products));
 }
 </script>
