@@ -18,7 +18,7 @@ function addToWishlist() {
 </script>
 <template>
   <div class="product-container">
-    <img src="https://picsum.photos/280/300" class="img" />
+    <img src="https://picsum.photos/240/300" class="img" />
     <div class="title">{{ props.title }}</div>
     <div class="rest">
       <span class="price">${{ props.price }}</span>
@@ -28,14 +28,14 @@ function addToWishlist() {
 </template>
 <style scoped>
 .product-container {
-  width: 17em;
-  margin: 0.5em;
+  width: 15em;
+  margin: 0.2em;
   float: left;
   margin: 20px;
   height: 24em;
 }
 .img {
-  width: 280;
+  width: 240;
   height: 300;
 }
 .title {
