@@ -34,6 +34,11 @@ function addToWishlist() {
   margin: 20px;
   height: 24em;
 }
+@media screen and (max-width: 1200px) {
+  .product-container {
+    margin: 10px;
+  }
+}
 .img {
   width: 240;
   height: 300;
