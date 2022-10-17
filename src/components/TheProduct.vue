@@ -15,7 +15,7 @@ function addToWishlist() {
     id: props.id,
     title: props.title,
     price: props.price,
-    image: props.image,
+    image: props.img,
   });
   // console.log(products);
   localStorage.setItem("products", JSON.stringify(products));

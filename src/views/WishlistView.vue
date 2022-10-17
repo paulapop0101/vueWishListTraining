@@ -41,7 +41,7 @@ function deleteProduct(id) {
           </tr>
           <tr v-for="(pr, index) in products" :key="index">
             <td>{{ index + 1 }}</td>
-            <td><img src="https://picsum.photos/50/70" /></td>
+            <td><img :src="pr.image" class="images" /></td>
             <td>{{ pr.title }}</td>
             <td>{{ pr.price }}</td>
             <td><button @click="deleteProduct(pr.id)">Delete</button></td>
@@ -129,5 +129,9 @@ a {
   padding-top: 3em;
   padding-left: 3em;
   padding-bottom: 1.5em;
+}
+.images {
+  width: 70px;
+  height: auto;
 }
 </style>
