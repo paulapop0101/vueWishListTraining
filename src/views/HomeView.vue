@@ -48,6 +48,7 @@ fetch("https://fakestoreapi.com/products?limit=8")
               :key="pr.id"
               :title="pr.title"
               :price="pr.price"
+              :img="pr.image"
               :id="pr.id"
             />
           </div>

@@ -11,14 +11,19 @@ function addToWishlist() {
     products = JSON.parse(localStorage.getItem("products"));
     products = products.filter((product) => product.id !== props.id);
   }
-  products.push({ id: props.id, title: props.title, price: props.price });
+  products.push({
+    id: props.id,
+    title: props.title,
+    price: props.price,
+    image: props.image,
+  });
   // console.log(products);
   localStorage.setItem("products", JSON.stringify(products));
 }
 </script>
 <template>
   <div class="product-container">
-    <img src="https://picsum.photos/240/300" class="img" />
+    <img :src="img" class="img" />
     <div class="title">{{ props.title }}</div>
     <div class="rest">
       <span class="price">${{ props.price }}</span>
@@ -40,8 +45,8 @@ function addToWishlist() {
   }
 }
 .img {
-  width: 240;
-  height: 300;
+  width: 240px;
+  height: 300px;
 }
 .title {
   margin-top: 0.5em;
