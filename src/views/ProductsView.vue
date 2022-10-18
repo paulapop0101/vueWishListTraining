@@ -1,45 +1,29 @@
 <script setup>
 import { ref } from "vue";
 import TheProductCard from "../components/TheProductCard.vue";
-import { onMounted } from "vue";
 import { computed } from "vue";
+import useProducts from "../composables/products";
+import useCategories from "../composables/categories";
 
-const categories = ref([]);
-const productsToDisplay = ref([]);
-const allProducts = ref([]);
 const term = ref("");
+
+const { products, isLoading, resetProducts, filterProducts } = useProducts();
+
+const { categories, categoriesAreLoading, resetCategoryButtons } =
+  useCategories();
 
 const productList = computed(() => {
   const regex = ".*" + term.value + ".*";
-  return productsToDisplay.value.filter((term1) => term1.title.match(regex));
-});
-
-onMounted(() => {
-  fetch("https://fakestoreapi.com/products/categories")
-    .then((res) => res.json())
-    .then((json) =>
-      json.forEach((element) => {
-        categories.value.push({ name: element, clicked: false });
-      })
-    );
-
-  fetch("https://fakestoreapi.com/products")
-    .then((res) => res.json())
-    .then(
-      (json) => ((productsToDisplay.value = json), (allProducts.value = json))
-    );
+  return products.value.filter((term1) => term1.title.match(regex));
 });
 
 function filter(category) {
-  categories.value.forEach((obj) => {
-    if (obj.name !== category.name) obj.clicked = false;
-  });
-  productsToDisplay.value = allProducts.value;
+  resetCategoryButtons(category.name);
+  resetProducts();
   category.clicked = !category.clicked;
-  if (category.clicked)
-    productsToDisplay.value = productsToDisplay.value.filter(
-      (product) => product.category === category.name
-    );
+  if (category.clicked) {
+    filterProducts(category.name);
+  }
 }
 </script>
 <template>
@@ -47,22 +31,25 @@ function filter(category) {
     <div class="main">
       <div class="container">
         <div class="side">
-          <ul>
-            <li><h3>Product Categories</h3></li>
-            <li
-              class="catlist"
-              v-for="cat in categories"
-              :key="cat.name"
-              @click="filter(cat)"
-            >
-              {{ cat.name }}
-            </li>
-          </ul>
+          <div v-if="!categoriesAreLoading">
+            <ul>
+              <li><h3>Product Categories</h3></li>
+              <li
+                class="catlist"
+                v-for="cat in categories"
+                :key="cat.name"
+                @click="filter(cat)"
+              >
+                {{ cat.name }}
+              </li>
+            </ul>
+          </div>
+          <div v-else>Is loading..</div>
         </div>
         <div class="content">
           <div class="search">
             <input type="text" placeholder="Search" v-model="term" />
-            <div class="products">
+            <div class="products" v-if="!isLoading">
               <TheProductCard
                 v-for="pr in productList"
                 :key="pr.id"
@@ -72,6 +59,7 @@ function filter(category) {
                 :id="pr.id"
               />
             </div>
+            <div class="loading" v-else>Is loading..</div>
           </div>
         </div>
       </div>
@@ -124,5 +112,10 @@ input[type="text"] {
   border: 2px solid #c2c2c2;
   height: 0.7em;
   margin-left: 1.1em;
+}
+.loading {
+  display: flex;
+  justify-content: center;
+  font-size: xx-large;
 }
 </style>

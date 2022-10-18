@@ -1,25 +1,8 @@
 <script setup>
-import { onMounted } from "vue";
-import { ref } from "vue";
+import useWishlist from "../composables/wishlist";
 
-const products = ref([]);
-
-onMounted(() => {
-  updateProducts();
-});
-
-function updateProducts() {
-  if (localStorage.getItem("products")) {
-    products.value = JSON.parse(localStorage.getItem("products"));
-    console.log(products.value);
-  }
-}
-function deleteProduct(id) {
-  let storageProducts = JSON.parse(localStorage.getItem("products"));
-  let products = storageProducts.filter((product) => product.id !== id);
-  localStorage.setItem("products", JSON.stringify(products));
-  updateProducts();
-}
+// eslint-disable-next-line no-unused-vars
+const { products, deleteProduct, addToWishlist, counter } = useWishlist();
 </script>
 <template>
   <div>

@@ -1,17 +1,17 @@
 <script setup>
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
+import useWishlist from "../composables/wishlist";
 
-const products = ref([]);
 const showNavBar = ref(true);
+// eslint-disable-next-line no-unused-vars
+const { products, deleteProduct, addToWishlist } = useWishlist();
+const counter = computed(() => {
+  return products.value.length;
+});
 
 onMounted(() => {
-  if (localStorage.getItem("products")) {
-    products.value = JSON.parse(localStorage.getItem("products"));
-    console.log(products.value);
-  }
-
   useRoute().name === "wishlist"
     ? (showNavBar.value = false)
     : (showNavBar.value = true);
@@ -29,9 +29,7 @@ onMounted(() => {
           </ul>
         </div>
         <div class="right">
-          <RouterLink to="/wishlist">
-            Wishlist ({{ products.length }})</RouterLink
-          >
+          <RouterLink to="/wishlist"> Wishlist ({{ counter }})</RouterLink>
         </div>
       </div>
       <div class="center">Outstock</div>

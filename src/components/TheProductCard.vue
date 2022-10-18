@@ -1,26 +1,14 @@
 <script setup>
+import useWishlist from "../composables/wishlist";
+
 const props = defineProps({
   title: String,
   price: Number,
   img: String,
   id: Number,
 });
-
-function addToWishlist() {
-  let products = [];
-  if (localStorage.getItem("products")) {
-    products = JSON.parse(localStorage.getItem("products"));
-    products = products.filter((product) => product.id !== props.id);
-  }
-  products.push({
-    id: props.id,
-    title: props.title,
-    price: props.price,
-    image: props.img,
-  });
-  // console.log(products);
-  localStorage.setItem("products", JSON.stringify(products));
-}
+// eslint-disable-next-line no-unused-vars
+const { products, deleteProduct, addToWishlist, counter } = useWishlist();
 </script>
 <template>
   <div class="product-container">
@@ -28,7 +16,18 @@ function addToWishlist() {
     <div class="title">{{ props.title }}</div>
     <div class="rest">
       <span class="price">${{ props.price }}</span>
-      <span class="addbutton" @click="addToWishlist()">Add to wishlist</span>
+      <span
+        class="addbutton"
+        @click="
+          addToWishlist({
+            id: props.id,
+            title: props.title,
+            price: props.price,
+            image: props.img,
+          })
+        "
+        >Add to wishlist</span
+      >
     </div>
   </div>
 </template>
