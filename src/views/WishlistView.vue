@@ -1,10 +1,13 @@
 <script setup>
 import { onMounted } from "vue";
 import { ref } from "vue";
+
 const products = ref([]);
+
 onMounted(() => {
   updateProducts();
 });
+
 function updateProducts() {
   if (localStorage.getItem("products")) {
     products.value = JSON.parse(localStorage.getItem("products"));

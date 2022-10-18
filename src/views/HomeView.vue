@@ -1,25 +1,25 @@
 <script setup>
 import { ref } from "vue";
-import CategoryItem from "../components/CategoryItem.vue";
-import TheProduct from "../components/TheProduct.vue";
-import TheNavigation from "../components/TheNavigation.vue";
-// import TheProduct from "../components/TheProduct.vue";
-// import SliderComponent from "../components/SliderComponent.vue";
-const categories = ref([]);
-fetch("https://fakestoreapi.com/products/categories")
-  .then((res) => res.json())
-  .then((json) => (categories.value = json));
+import CategoryImage from "../components/CategoryImage.vue";
+import TheProductCard from "../components/TheProductCard.vue";
+import { onMounted } from "vue";
 
+const categories = ref([]);
 const trending = ref([]);
-fetch("https://fakestoreapi.com/products?limit=8")
-  .then((res) => res.json())
-  .then((json) => (trending.value = json));
+
+onMounted(() => {
+  fetch("https://fakestoreapi.com/products/categories")
+    .then((res) => res.json())
+    .then((json) => (categories.value = json));
+
+  fetch("https://fakestoreapi.com/products?limit=8")
+    .then((res) => res.json())
+    .then((json) => (trending.value = json));
+});
 </script>
 <template>
   <div>
-    <TheNavigation></TheNavigation>
     <div class="main">
-      <!-- <h1>here</h1> -->
       <div class="img-wrapper">
         <img src="https://picsum.photos/id/465/1200/600.jpg" class="image" />
         <div class="textimage">
@@ -33,7 +33,7 @@ fetch("https://fakestoreapi.com/products?limit=8")
     </div>
     <div class="container">
       <div class="category-slider">
-        <CategoryItem
+        <CategoryImage
           v-for="cat in categories"
           :key="cat"
           :categoryName="cat"
@@ -43,7 +43,7 @@ fetch("https://fakestoreapi.com/products?limit=8")
         <h2>Trending Products</h2>
         <div class="products-wrapper">
           <div class="products">
-            <TheProduct
+            <TheProductCard
               v-for="pr in trending"
               :key="pr.id"
               :title="pr.title"

@@ -1,17 +1,25 @@
 <script setup>
 import { onMounted } from "vue";
 import { ref } from "vue";
+import { useRoute } from "vue-router";
+
 const products = ref([]);
+const showNavBar = ref(true);
+
 onMounted(() => {
   if (localStorage.getItem("products")) {
     products.value = JSON.parse(localStorage.getItem("products"));
     console.log(products.value);
   }
+
+  useRoute().name === "wishlist"
+    ? (showNavBar.value = false)
+    : (showNavBar.value = true);
 });
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="showNavBar">
     <div class="navi">
       <div class="one">
         <div class="left">

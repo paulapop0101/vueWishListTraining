@@ -1,45 +1,49 @@
 <script setup>
 import { ref } from "vue";
-import TheProduct from "../components/TheProduct.vue";
-import TheNavigation from "../components/TheNavigation.vue";
+import TheProductCard from "../components/TheProductCard.vue";
+import { onMounted } from "vue";
+import { computed } from "vue";
+
 const categories = ref([]);
-fetch("https://fakestoreapi.com/products/categories")
-  .then((res) => res.json())
-  .then((json) =>
-    json.forEach((element) => {
-      categories.value.push({ name: element, clicked: false });
-    })
-  );
-
-const products_to_display = ref([]);
-const all_products = ref([]);
-fetch("https://fakestoreapi.com/products")
-  .then((res) => res.json())
-  .then(
-    (json) => ((products_to_display.value = json), (all_products.value = json))
-  );
-
+const productsToDisplay = ref([]);
+const allProducts = ref([]);
 const term = ref("");
-function searchTerm() {
+
+const productList = computed(() => {
   const regex = ".*" + term.value + ".*";
-  return products_to_display.value.filter((term1) => term1.title.match(regex));
-}
+  return productsToDisplay.value.filter((term1) => term1.title.match(regex));
+});
+
+onMounted(() => {
+  fetch("https://fakestoreapi.com/products/categories")
+    .then((res) => res.json())
+    .then((json) =>
+      json.forEach((element) => {
+        categories.value.push({ name: element, clicked: false });
+      })
+    );
+
+  fetch("https://fakestoreapi.com/products")
+    .then((res) => res.json())
+    .then(
+      (json) => ((productsToDisplay.value = json), (allProducts.value = json))
+    );
+});
+
 function filter(category) {
   categories.value.forEach((obj) => {
     if (obj.name !== category.name) obj.clicked = false;
   });
-  products_to_display.value = all_products.value;
+  productsToDisplay.value = allProducts.value;
   category.clicked = !category.clicked;
   if (category.clicked)
-    products_to_display.value = products_to_display.value.filter(
+    productsToDisplay.value = productsToDisplay.value.filter(
       (product) => product.category === category.name
     );
 }
 </script>
 <template>
   <div>
-    <TheNavigation></TheNavigation>
-
     <div class="main">
       <div class="container">
         <div class="side">
@@ -57,15 +61,10 @@ function filter(category) {
         </div>
         <div class="content">
           <div class="search">
-            <input
-              type="text"
-              placeholder="Search"
-              v-model="term"
-              @input="searchTerm()"
-            />
+            <input type="text" placeholder="Search" v-model="term" />
             <div class="products">
-              <TheProduct
-                v-for="pr in searchTerm()"
+              <TheProductCard
+                v-for="pr in productList"
                 :key="pr.id"
                 :title="pr.title"
                 :price="pr.price"

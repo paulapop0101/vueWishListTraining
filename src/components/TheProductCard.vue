@@ -5,6 +5,7 @@ const props = defineProps({
   img: String,
   id: Number,
 });
+
 function addToWishlist() {
   let products = [];
   if (localStorage.getItem("products")) {
