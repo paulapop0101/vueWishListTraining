@@ -1,16 +1,15 @@
 <script setup>
-import { computed, onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import useWishlist from "../composables/wishlist";
 
 const showNavBar = ref(true);
 // eslint-disable-next-line no-unused-vars
-const { products, deleteProduct, addToWishlist } = useWishlist();
-const counter = computed(() => {
-  return products.value.length;
+const { products, deleteProduct, addToWishlist, counter } = useWishlist();
+watch(products, async (newProduct, oldProduct) => {
+  console.log(newProduct, oldProduct);
 });
-
 onMounted(() => {
   useRoute().name === "wishlist"
     ? (showNavBar.value = false)

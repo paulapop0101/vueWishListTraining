@@ -1,4 +1,4 @@
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 const useWishlist = () => {
   const products = ref([]);
 
@@ -16,17 +16,26 @@ const useWishlist = () => {
   onMounted(() => {
     updateProducts();
   });
-  const addToWishlist = (newProduct) => {
+  const addToWishlist = (newProduct1) => {
+    let newProduct;
     if (localStorage.getItem("products")) {
-      products.value = JSON.parse(localStorage.getItem("products"));
-      products.value = products.value.filter(
-        (product) => product.id !== newProduct.id
+      newProduct = JSON.parse(localStorage.getItem("products"));
+      newProduct = newProduct.filter(
+        (product) => product.id !== newProduct1.id
       );
     }
-    products.value.push(newProduct);
-    localStorage.setItem("products", JSON.stringify(products.value));
+    newProduct.push(newProduct1);
+    localStorage.setItem("products", JSON.stringify(newProduct));
+    window.dispatchEvent(new Event("storage"));
   };
-  return { products, deleteProduct, addToWishlist };
+  const counter = computed(() => {
+    console.log(products.value);
+    return products.value.length;
+  });
+  window.addEventListener("storage", () => {
+    updateProducts();
+  });
+  return { products, deleteProduct, addToWishlist, counter };
 };
 
 export default useWishlist;
