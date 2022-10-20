@@ -1,15 +1,12 @@
 <script setup>
-import { onMounted, watch } from "vue";
+import { onMounted } from "vue";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import useWishlist from "../composables/wishlist";
 
 const showNavBar = ref(true);
 // eslint-disable-next-line no-unused-vars
-const { products, deleteProduct, addToWishlist, counter } = useWishlist();
-watch(products, async (newProduct, oldProduct) => {
-  console.log(newProduct, oldProduct);
-});
+const { products, deleteProduct, addToWishlist } = useWishlist();
 onMounted(() => {
   useRoute().name === "wishlist"
     ? (showNavBar.value = false)
@@ -28,7 +25,9 @@ onMounted(() => {
           </ul>
         </div>
         <div class="right">
-          <RouterLink to="/wishlist"> Wishlist ({{ counter }})</RouterLink>
+          <RouterLink to="/wishlist">
+            Wishlist ({{ products.length }})</RouterLink
+          >
         </div>
       </div>
       <div class="center">Outstock</div>

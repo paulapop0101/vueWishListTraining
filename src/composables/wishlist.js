@@ -1,41 +1,20 @@
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref } from "vue";
+import { useProductList } from "../stores/useProducts";
 const useWishlist = () => {
   const products = ref([]);
-
-  const updateProducts = () => {
-    if (localStorage.getItem("products")) {
-      products.value = JSON.parse(localStorage.getItem("products"));
-    }
-  };
-  const deleteProduct = (id) => {
-    let storageProducts = JSON.parse(localStorage.getItem("products"));
-    let products = storageProducts.filter((product) => product.id !== id);
-    localStorage.setItem("products", JSON.stringify(products));
-    updateProducts();
-  };
+  const store = useProductList();
   onMounted(() => {
-    updateProducts();
+    products.value = store.products;
   });
-  const addToWishlist = (newProduct1) => {
-    let newProduct;
-    if (localStorage.getItem("products")) {
-      newProduct = JSON.parse(localStorage.getItem("products"));
-      newProduct = newProduct.filter(
-        (product) => product.id !== newProduct1.id
-      );
-    }
-    newProduct.push(newProduct1);
-    localStorage.setItem("products", JSON.stringify(newProduct));
-    window.dispatchEvent(new Event("storage"));
+  const deleteProduct = (id) => {
+    store.deleteProduct(id);
+    products.value = store.products;
   };
-  const counter = computed(() => {
-    console.log(products.value);
-    return products.value.length;
-  });
-  window.addEventListener("storage", () => {
-    updateProducts();
-  });
-  return { products, deleteProduct, addToWishlist, counter };
+  const addToWishlist = (newProduct1) => {
+    store.addProduct(newProduct1);
+    products.value = store.products;
+  };
+  return { products, deleteProduct, addToWishlist };
 };
 
 export default useWishlist;

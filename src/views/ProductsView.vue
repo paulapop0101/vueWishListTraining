@@ -4,11 +4,13 @@ import TheProductCard from "../components/TheProductCard.vue";
 import { computed } from "vue";
 import useProducts from "../composables/products";
 import useCategories from "../composables/categories";
+import LoaderComponent from "../components/LoaderComponent.vue";
 
 const term = ref("");
 
 const { products, isLoading, resetProducts, filterProducts } = useProducts();
 
+// eslint-disable-next-line no-unused-vars
 const { categories, categoriesAreLoading, resetCategoryButtons } =
   useCategories();
 
@@ -28,42 +30,42 @@ function filter(category) {
 </script>
 <template>
   <div>
-    <div class="main">
-      <div class="container">
-        <div class="side">
-          <div v-if="!categoriesAreLoading">
-            <ul>
-              <li><h3>Product Categories</h3></li>
-              <li
-                class="catlist"
-                v-for="cat in categories"
-                :key="cat.name"
-                @click="filter(cat)"
-              >
-                {{ cat.name }}
-              </li>
-            </ul>
-          </div>
-          <div v-else>Is loading..</div>
-        </div>
-        <div class="content">
-          <div class="search">
-            <input type="text" placeholder="Search" v-model="term" />
-            <div class="products" v-if="!isLoading">
-              <TheProductCard
-                v-for="pr in productList"
-                :key="pr.id"
-                :title="pr.title"
-                :price="pr.price"
-                :img="pr.image"
-                :id="pr.id"
-              />
+    <LoaderComponent :state="isLoading">
+      <div class="main">
+        <div class="container">
+          <div class="side">
+            <div>
+              <ul>
+                <li><h3>Product Categories</h3></li>
+                <li
+                  class="catlist"
+                  v-for="cat in categories"
+                  :key="cat.name"
+                  @click="filter(cat)"
+                >
+                  {{ cat.name }}
+                </li>
+              </ul>
             </div>
-            <div class="loading" v-else>Is loading..</div>
+          </div>
+          <div class="content">
+            <div class="search">
+              <input type="text" placeholder="Search" v-model="term" />
+              <div class="products">
+                <TheProductCard
+                  v-for="pr in productList"
+                  :key="pr.id"
+                  :title="pr.title"
+                  :price="pr.price"
+                  :img="pr.image"
+                  :id="pr.id"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </LoaderComponent>
   </div>
 </template>
 <style scoped>

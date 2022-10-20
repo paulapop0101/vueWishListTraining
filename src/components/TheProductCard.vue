@@ -8,7 +8,7 @@ const props = defineProps({
   id: Number,
 });
 // eslint-disable-next-line no-unused-vars
-const { products, deleteProduct, addToWishlist, counter } = useWishlist();
+const { products, deleteProduct, addToWishlist } = useWishlist();
 </script>
 <template>
   <div class="product-container">
