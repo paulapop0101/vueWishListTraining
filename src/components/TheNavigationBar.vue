@@ -1,17 +1,25 @@
 <script setup>
-import { onMounted } from "vue";
+import { computed } from "vue";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import useWishlist from "../composables/wishlist";
+import { useUserCredentials } from "../stores/useUser";
 
-const showNavBar = ref(true);
+//const showNavBar = ref(true);
 // eslint-disable-next-line no-unused-vars
 const { products, deleteProduct, addToWishlist } = useWishlist();
-onMounted(() => {
-  useRoute().name === "wishlist"
-    ? (showNavBar.value = false)
-    : (showNavBar.value = true);
+const store = useUserCredentials();
+const pathsToExclude = ref(["wishlist"]);
+const showNavBar = computed(() => {
+  let variable = true;
+  pathsToExclude.value.includes(useRoute().name)
+    ? (variable = false)
+    : (variable = true);
+  return variable;
 });
+const logout = () => {
+  store.logoutUser();
+};
 </script>
 
 <template>
@@ -26,8 +34,16 @@ onMounted(() => {
         </div>
         <div class="right">
           <RouterLink to="/wishlist">
-            Wishlist ({{ products.length }})</RouterLink
-          >
+            Wishlist ({{ products.length }})
+          </RouterLink>
+          <div v-if="!store.isLoggedIn">
+            <RouterLink to="/login"> Login </RouterLink>
+            <RouterLink to="/register"> Register </RouterLink>
+          </div>
+          <div v-else>
+            <RouterLink to="/" @click="logout()"> Log out </RouterLink>
+            <RouterLink to="/admin"> Administration </RouterLink>
+          </div>
         </div>
       </div>
       <div class="center">Outstock</div>
@@ -73,6 +89,7 @@ li {
   float: right;
   margin-top: 1em;
   margin-right: 3em;
+  display: flex;
 }
 a {
   text-decoration: none;

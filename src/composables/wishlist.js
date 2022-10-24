@@ -1,18 +1,18 @@
 import { onMounted, ref } from "vue";
-import { useProductList } from "../stores/useProducts";
+import { useWishList } from "../stores/useWishlist";
 const useWishlist = () => {
   const products = ref([]);
-  const store = useProductList();
+  const store = useWishList();
   onMounted(() => {
-    products.value = store.products;
+    products.value = store.wishlist;
   });
   const deleteProduct = (id) => {
-    store.deleteProduct(id);
-    products.value = store.products;
+    store.deleteProductFromWishlist(id);
+    products.value = store.wishlist;
   };
   const addToWishlist = (newProduct1) => {
-    store.addProduct(newProduct1);
-    products.value = store.products;
+    store.addProductToWishlist(newProduct1);
+    products.value = store.wishlist;
   };
   return { products, deleteProduct, addToWishlist };
 };

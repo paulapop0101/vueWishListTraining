@@ -1,14 +1,19 @@
 import { onMounted, ref } from "vue";
+import { useProductsStore } from "../stores/useProducts";
 const useProducts = () => {
   const products = ref([]);
   const isLoading = ref(false);
-  const allProducts = ref([]);
+  const allProducts = ref(false);
+  const storeProducts = useProductsStore();
 
   const loadProducts = async () => {
     isLoading.value = true;
     const data = await fetch("https://fakestoreapi.com/products");
-    products.value = await data.json();
-    allProducts.value = products.value;
+    allProducts.value = await data.json();
+    storeProducts.products.forEach((product) => {
+      allProducts.value.push(product);
+    });
+    products.value = allProducts.value;
     isLoading.value = false;
   };
 
