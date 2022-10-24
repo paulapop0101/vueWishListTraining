@@ -1,5 +1,5 @@
 <script setup>
-import CredentialsComponent from "../components/CredentialsComponent.vue";
+import CredentialsComponent from "../componentsSlots/CredentialsComponent.vue";
 import { ref } from "vue";
 import { useUserCredentials } from "../stores/useUser";
 const username = ref("");
