@@ -15,6 +15,7 @@ const useProducts = () => {
     });
     products.value = allProducts.value;
     isLoading.value = false;
+    console.log(products.value);
   };
 
   const resetProducts = () => {

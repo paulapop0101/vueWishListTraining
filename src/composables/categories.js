@@ -11,7 +11,6 @@ const useCategories = () => {
     categoryNames.value.forEach((element) => {
       categories.value.push({ name: element, clicked: false });
     });
-    console.log(categories.value);
     isLoading.value = false;
   };
 

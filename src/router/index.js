@@ -34,14 +34,14 @@ const router = createRouter({
       path: "/admin",
       name: "admin",
       component: () => import("../views/AdministrationView.vue"),
-      beforeEnter() {
-        const store = useUserCredentials();
-        if (store.isLoggedIn) return true;
-        else {
-          alert("Please login first");
-          return "/";
-        }
-      },
+      // beforeEnter() {
+      //   const store = useUserCredentials();
+      //   if (store.isLoggedIn) return true;
+      //   else {
+      //     alert("Please login first");
+      //     return "/";
+      //   }
+      // },
     },
   ],
 });

@@ -5,6 +5,7 @@ import { computed } from "vue";
 import useProducts from "../composables/products";
 import useCategories from "../composables/categories";
 import LoaderComponent from "../components/LoaderComponent.vue";
+import LayoutMenu from "../components/LayoutMenu.vue";
 
 const term = ref("");
 
@@ -31,40 +32,38 @@ function filter(category) {
 <template>
   <div>
     <LoaderComponent :state="isLoading">
-      <div class="main">
-        <div class="container">
-          <div class="side">
-            <div>
-              <ul>
-                <li><h3>Product Categories</h3></li>
-                <li
-                  class="catlist"
-                  v-for="cat in categories"
-                  :key="cat.name"
-                  @click="filter(cat)"
-                >
-                  {{ cat.name }}
-                </li>
-              </ul>
+      <LayoutMenu>
+        <template #left-side>
+          <div>
+            <ul>
+              <li><h3>Product Categories</h3></li>
+              <li
+                class="catlist"
+                v-for="cat in categories"
+                :key="cat.name"
+                @click="filter(cat)"
+              >
+                {{ cat.name }}
+              </li>
+            </ul>
+          </div>
+        </template>
+        <template #menu-side>
+          <div class="search">
+            <input type="text" placeholder="Search" v-model="term" />
+            <div class="products">
+              <TheProductCard
+                v-for="pr in productList"
+                :key="pr.id"
+                :title="pr.title"
+                :price="pr.price"
+                :img="pr.image"
+                :id="pr.id"
+              />
             </div>
           </div>
-          <div class="content">
-            <div class="search">
-              <input type="text" placeholder="Search" v-model="term" />
-              <div class="products">
-                <TheProductCard
-                  v-for="pr in productList"
-                  :key="pr.id"
-                  :title="pr.title"
-                  :price="pr.price"
-                  :img="pr.image"
-                  :id="pr.id"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        </template>
+      </LayoutMenu>
     </LoaderComponent>
   </div>
 </template>
